@@ -5,7 +5,7 @@ const getClients = async (req, res) => {
     const connection = await database.getConnection();
     const result = await connection.query("SELECT * FROM ciudadanos");
     res.json(result);
-  } catch (error) {
+  } catch(error) {
     res.status(500);
     res.send(error.message);
   }
@@ -24,7 +24,7 @@ const getClient = async (req, res) => {
       return;
     }
     res.json(result);
-  } catch {
+  } catch(error)  {
     res.status(500);
     res.send(error.message);
   }
@@ -44,7 +44,7 @@ const addClient = async (req, res) => {
     await connection.query("INSERT INTO ciudadanos SET ?", client);
     res.json({ message: "Client add" });
     return;
-  } catch (error) {
+  } catch(error) {
     res.status(500);
     res.send(error.message);
   }
@@ -58,22 +58,19 @@ const updateClient = async (req, res) => {
       res.send("Faltan datos");
       return;
     }
-    const client = { nombre, apellido, dni, direccion, deuda };
+    const client = { id, nombre, apellido, dni, direccion, deuda };
     const connection = await database.getConnection();
     await connection.query("UPDATE ciudadanos SET ? WHERE id = ?", [
       client,
       id,
     ]);
-    if (result.length === 0) {
-      res.status(404);
-      res.send("Id no registrada");
-      return;
-    }
+  
     res.json({ message: "Client update" });
     return;
-  } catch {
+  } catch(error)  {
     res.status(500);
     res.send(error.message);
+    return
   }
 };
 const deleteClient = async (req, res) => {
@@ -90,7 +87,7 @@ const deleteClient = async (req, res) => {
       return;
     }
     res.json({ message: "Client deleted" });
-  } catch {
+  } catch(error)  {
     res.status(500);
     res.send(error.message);
   }
